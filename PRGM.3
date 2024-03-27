@@ -1,119 +1,106 @@
-create table actor 
-( 
-act_id int, 
-act_name varchar(25) , 
-act_gender char(1), 
-primary key(act_id) 
-);  
+CREATE TABLE ACTOR ( 
+ACT_ID NUMBER (3), 
+ACT_NAME VARCHAR (20), 
+ACT_GENDER CHAR (1), 
+PRIMARY KEY (ACT_ID)); 
 
-create table director 
-( 
-dir_id int , 
-dir_name varchar(25) , 
-dir_phone int , 
-primary key(dir_id) 
-); 
-
-create table movies 
-( 
-mov_id int, 
-mov_title varchar(50), 
-mov_year int not null, 
-mov_lang varchar(15), 
-dir_id int , 
-primary key (mov_id), 
-foreign key (dir_id) references director(dir_id) on delete cascade 
-); 
+CREATE TABLE DIRECTOR ( 
+DIR_ID NUMBER (3), 
+DIR_NAME VARCHAR (20), 
+DIR_PHONE NUMBER (10), 
+PRIMARY KEY (DIR_ID));
  
-create table movie_cast 
-( 
-act_id INT , 
-mov_id int, 
-role varchar(45) , 
-primary key(act_id,mov_Id), 
-foreign key (act_id) references actor(act_id) on delete cascade, 
-foreign key (mov_id) references movies(mov_id) on delete cascade 
-); 
+CREATE TABLE MOVIES ( 
+MOV_ID NUMBER (4), 
+MOV_TITLE VARCHAR (25), 
+MOV_YEAR NUMBER (4), 
+MOV_LANG VARCHAR (12), 
+DIR_ID NUMBER (3), 
+PRIMARY KEY (MOV_ID), 
+FOREIGN KEY (DIR_ID) REFERENCES DIRECTOR (DIR_ID)); 
 
-create table rating 
-( 
-mov_id int not null, 
-rev_stars int not null, 
-primary key (mov_id), 
-foreign key (mov_id) references movies(mov_id) on delete cascade 
-);
-
-insert into actor values('101','James','M'); 
-insert into actor values('102','Deborah','F');  
-insert into actor values('103','Peter','M');  
-insert into actor values('104','Robert','M');  
-insert into actor values('105','Murray','M'); 
-insert into actor values('106','Harrison','M'); 
-insert into actor values('107','Nicole','F'); 
-insert into actor values('108','Stephen','M');  
-insert into actor values('109','Jack','M'); 
-insert into actor values('110','Kate','F'); 
-
-insert into director values('201','Alfred','675409'); 
-insert into director values('202','Jack','689543'); 
-insert into director values('203','David','660908'); 
-insert into director values('204','Michael','656432'); 
-insert into director values('205','Milos','600944'); 
-Dept. Of ISE, EPCETPage 49 
-insert into director values('206','Stanley','677543'); 
-insert into director values('207','Roman','660089'); 
-
-insert into movies values('1','Vertigo','1994','English','201'); 
-insert into movies values('2','Innocents','1997','English','201'); 
-insert into movies values('3','Deer Hunter','1972','English','202'); 
-insert into movies values('4','Eyes Wid Shut','2002','English','202'); 
-insert into movies values('5','Wings','2016','English','203'); 
-insert into movies values('6','Usual Suspects','2006','English','204'); 
-insert into movies values('7','Samurai','2017','English','205'); 
-insert into movies values('8','The Prestige','2016','English','206'); 
-insert into movies values('9','American Beauty','2015','English','201'); 
-insert into movies values('10','Walls','2000','English','207'); 
-
-insert into movie_cast values('101','1','James'); 
-insert into movie_cast values('101','6','Fero'); 
-insert into movie_cast values('101','2','Eddie'); 
-insert into movie_cast values('102','5','July'); 
-insert into movie_cast values('103','3','John'); 
-insert into movie_cast values('104','7','Adam'); 
-insert into movie_cast values('105','8','Manus'); 
-insert into movie_cast values('106','1','Rick'); 
-insert into movie_cast values('107','8','Rose'); 
-insert into movie_cast values('107','9','Sam'); 
-insert into movie_cast values('108','1','Rock'); 
-insert into movie_cast values('108','5','Bobby'); 
-insert into movie_cast values('109','10','Ed'); 
-insert into movie_cast values('110','4','Cathie'); 
-
-insert into rating values('1','3'); 
-insert into rating values('2','3'); 
-insert into rating values('3','2'); 
-insert into rating values('4','5'); 
-insert into rating values('5','4'); 
-insert into rating values('6','3'); 
-insert into rating values('7','2'); 
-insert into rating values('8','1'); 
-insert into rating values('9','5'); 
-insert into rating values('10','4'); 
-
-select mov_title from movies m,director d where d.dir_id=m.dir_id and 
-dir_name="Alfred"; 
-
-select mov_title from movies where mov_id in(select mov_id from movie_cast where act_id 
-in(select act_id from movie_cast group by act_id having count(*)>1)); 
+CREATE TABLE MOVIE_CAST ( 
+ACT_ID NUMBER (3), 
+MOV_ID NUMBER (4), 
+ROLE VARCHAR (10), 
+PRIMARY KEY (ACT_ID, MOV_ID), 
+FOREIGN KEY (ACT_ID) REFERENCES ACTOR (ACT_ID), 
+FOREIGN KEY (MOV_ID) REFERENCES MOVIES (MOV_ID));
  
-select act_name from actor where act_id in(select A.act_id from(select act_id from 
-movie_cast join movies on movie_cast.mov_id=movies.mov_id where 
-mov_year<2000)A,(select act_id from movie_cast join movies on 
-movie_cast.mov_id=movies.mov_id where mov_year>2015)B where A.act_id=B.act_id); 
- 
-select mov_title,rev_stars from movies m,rating r where m.mov_id=r.mov_id order by 
-mov_title; 
+CREATE TABLE RATING ( 
+MOV_ID NUMBER (4), 
+REV_STARS VARCHAR (25), 
+PRIMARY KEY (MOV_ID), 
+FOREIGN KEY (MOV_ID) REFERENCES MOVIES (MOV_ID));
 
-update rating set rev_stars=5 where mov_id in (select m.mov_id from movies m,director d 
-where m.dir_id=d.dir_id and dir_name='Michael'); 
-select * from rating;
+INSERT INTO ACTOR VALUES (301,‘ANUSHKA‘,‘F‘); 
+INSERT INTO ACTOR VALUES (302,‘PRABHAS‘,‘M‘); 
+INSERT INTO ACTOR VALUES (303,‘PUNITH‘,‘M‘); 
+INSERT INTO ACTOR VALUES (304,‘JERMY‘,‘M‘); 
+
+INSERT INTO DIRECTOR VALUES (60,‘RAJAMOULI‘, 8751611001); 
+INSERT INTO DIRECTOR VALUES (61,‘HITCHCOCK‘, 7766138911); 
+INSERT INTO DIRECTOR VALUES (62,‘FARAN‘, 9986776531); 
+INSERT INTO DIRECTOR VALUES (63,‘STEVEN SPIELBERG‘, 8989776530); 
+
+INSERT INTO MOVIES VALUES (1001,‘BAHUBALI-2‘, 2017, ‘TELAGU‘, 60); 
+INSERT INTO MOVIES VALUES (1002,‘BAHUBALI-1‘, 2015, ‘TELAGU‘, 60); 
+INSERT INTO MOVIES VALUES (1003,‘AKASH‘, 2008, ‘KANNADA‘, 61); 
+INSERT INTO MOVIES VALUES (1004,‘WAR HORSE‘, 2011, ‘ENGLISH‘, 63); 
+
+INSERT INTO MOVIE_CAST VALUES (301, 1002, ‘HEROINE‘); 
+INSERT INTO MOVIE_CAST VALUES (301, 1001, ‘HEROINE‘); 
+INSERT INTO MOVIE_CAST VALUES (303, 1003, ‘HERO‘); 
+INSERT INTO MOVIE_CAST VALUES (303, 1002, ‘GUEST‘); 
+INSERT INTO MOVIE_CAST VALUES (304, 1004, ‘HERO‘); 
+
+INSERT INTO RATING VALUES (1001, 4); 
+INSERT INTO RATING VALUES (1002, 2); 
+INSERT INTO RATING VALUES (1003, 5); 
+INSERT INTO RATING VALUES (1004, 4);
+
+SELECT MOV_TITLE 
+FROM MOVIES 
+WHERE DIR_ID IN (SELECT DIR_ID 
+FROM DIRECTOR 
+WHERE DIR_NAME = ‗HITCHCOCK‘); 
+(OR) 
+SELECT MOV_TITLE 
+FROM MOVIES M,DIRECTOR D 
+WHERE D.DIR_ID=M.DIR_ID AND D.DIR_NAME= 'HITCHCOCK'; 
+ 
+FROM MOVIES M, MOVIE_CAST MV 
+WHERE M.MOV_ID=MV.MOV_ID AND ACT_ID IN (SELECT ACT_ID 
+FROM MOVIE_CAST GROUP BY 
+ACT_ID HAVING COUNT (ACT_ID)>1) 
+GROUP BY MOV_TITLE 
+HAVING COUNT (*)>1; 
+
+SELECT ACT_NAME, MOV_TITLE, MOV_YEAR 
+FROM ACTOR A 
+JOIN MOVIE_CAST C 
+ON A.ACT_ID=C.ACT_ID 
+JOIN MOVIES M 
+ON C.MOV_ID=M.MOV_ID 
+WHERE M.MOV_YEAR NOT BETWEEN 2000 AND 2015; 
+(OR) 
+SELECT A.ACT_NAME, A.ACT_NAME, C.MOV_TITLE, C.MOV_YEAR 
+FROM ACTOR A, MOVIE_CAST B, MOVIES C WHERE 
+A.ACT_ID=B.ACT_ID 
+AND B.MOV_ID=C.MOV_ID 
+AND C.MOV_YEAR NOT BETWEEN 2000 AND 2015; 
+
+SELECT MOV_TITLE, MAX (REV_STARS) 
+FROM MOVIES 
+INNER JOIN RATING USING (MOV_ID) 
+GROUP BY MOV_TITLE 
+HAVING MAX (REV_STARS)>0 
+ORDER BY MOV_TITLE;
+ 
+UPDATE RATING
+SET REV_STARS=5 
+WHERE MOV_ID IN (SELECT MOV_ID FROM MOVIES 
+WHERE DIR_ID IN (SELECT DIR_ID 
+FROM DIRECTOR 
+WHERE DIR_NAME = ‗STEVEN 
+SPIELBERG‘));
